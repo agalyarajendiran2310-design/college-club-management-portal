@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>UniClub | College Club Management</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{
+ --black:#050505;
+ --black2:#0b0b0b;
+ --card:#111;
+ --card2:#171717;
+ --white:#fff;
+ --gray:#aaa;
+ --line:#292929;
+ --gold:#d6b46a;
+}
+body{
+ font-family:Arial,Helvetica,sans-serif;
+ background:var(--black);
+ color:var(--white);
+ line-height:1.6;
+}
+a{text-decoration:none;color:inherit}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+
+.container{width:92%;max-width:1200px;margin:auto}
+section{padding:80px 0}
+
+/* NAVBAR */
+.nav{
+ position:sticky;top:0;z-index:1000;
+ background:rgba(5,5,5,.94);
+ backdrop-filter:blur(15px);
+ border-bottom:1px solid var(--line);
+}
+.navin{
+ min-height:72px;display:flex;align-items:center;
+ justify-content:space-between;
+}
+.logo{
+ display:flex;align-items:center;gap:10px;
+ font-size:23px;font-weight:900;
+}
+.logo span{
+ width:40px;height:40px;border-radius:10px;
+ display:grid;place-items:center;
+ background:var(--white);color:#000;
+}
+.links{display:flex;gap:28px}
+.links a{font-size:13px;color:#bbb;font-weight:bold}
+.links a:hover{color:#fff}
+.menu{display:none;background:none;color:#fff;border:1px solid #333;padding:8px 12px;border-radius:8px}
+
+/* HERO */
+.hero{
+ min-height:650px;
+ display:flex;align-items:center;
+ background:
+ radial-gradient(circle at 80% 20%,rgba(214,180,106,.10),transparent 28%),
+ linear-gradient(180deg,#050505,#0b0b0b);
+}
+.heroGrid{
+ display:grid;grid-template-columns:1.05fr .95fr;
+ gap:60px;align-items:center;
+}
+.tag{
+ display:inline-block;
+ border:1px solid #333;
+ padding:7px 13px;border-radius:30px;
+ color:var(--gold);font-size:11px;
+ font-weight:bold;letter-spacing:1px;
+ margin-bottom:20px;
+}
+.hero h1{
+ font-size:clamp(45px,6vw,76px);
+ line-height:1.02;letter-spacing:-4px;
+ margin-bottom:22px;
+}
+.hero h1 span{color:var(--gold)}
+.hero p{color:#999;font-size:17px;max-width:620px;margin-bottom:28px}
+.btn{
+ border:0;border-radius:9px;
+ padding:13px 20px;font-weight:bold;
+ transition:.25s;
+}
+.primary{background:#fff;color:#000}
+.primary:hover{background:var(--gold);transform:translateY(-3px)}
+.outline{background:transparent;color:#fff;border:1px solid #444}
+.outline:hover{border-color:#fff}
+.buttons{display:flex;gap:10px;flex-wrap:wrap}
+
+/* HERO IMAGE */
+.heroImage{
+ height:430px;border-radius:25px;overflow:hidden;
+ border:1px solid #333;position:relative;
+ background:url("https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=85") center/cover;
+}
+.heroImage:after{
+ content:"";position:absolute;inset:0;
+ background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.9));
+}
+.heroBox{
+ position:absolute;bottom:25px;left:25px;right:25px;
+ z-index:2;background:rgba(10,10,10,.78);
+ border:1px solid #444;border-radius:15px;
+ padding:20px;backdrop-filter:blur(10px);
+}
+.heroBox strong{font-size:27px}
+.heroBox p{font-size:12px;margin:3px 0 0}
+
+/* STATS */
+.stats{padding:25px 0 70px}
+.statGrid{
+ display:grid;grid-template-columns:repeat(4,1fr);gap:15px;
+}
+.stat{
+ background:var(--card);border:1px solid var(--line);
+ padding:24px;border-radius:15px;
+}
+.stat small{color:#777}
+.stat h2{font-size:32px;margin-top:4px}
+.stat h2 span{color:var(--gold)}
+
+/* HEADINGS */
+.head{text-align:center;max-width:650px;margin:0 auto 40px}
+.head small{color:var(--gold);font-weight:bold;letter-spacing:2px}
+.head h2{font-size:42px;margin:8px 0}
+.head p{color:#888}
+
+/* CLUBS */
+.tools{
+ display:flex;gap:12px;justify-content:space-between;
+ margin-bottom:25px;flex-wrap:wrap;
+}
+.search{flex:1;min-width:240px}
+.search input{
+ width:100%;padding:13px 16px;
+ background:#0d0d0d;border:1px solid #333;
+ color:#fff;border-radius:10px;outline:0;
+}
+.filters{display:flex;gap:7px;flex-wrap:wrap}
+.filter{
+ background:#0d0d0d;color:#aaa;
+ border:1px solid #333;padding:9px 13px;
+ border-radius:20px;font-size:12px;
+}
+.filter.active,.filter:hover{background:#fff;color:#000}
+
+.clubGrid{
+ display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+}
+.club{
+ background:var(--card);border:1px solid #292929;
+ border-radius:17px;overflow:hidden;
+ transition:.3s;
+}
+.club:hover{transform:translateY(-6px);border-color:#555}
+.photo{height:190px;position:relative;overflow:hidden}
+.photo img{
+ width:100%;height:100%;object-fit:cover;
+ transition:.5s;
+}
+.club:hover .photo img{transform:scale(1.07)}
+.badge{
+ position:absolute;top:13px;left:13px;
+ background:rgba(0,0,0,.75);color:#fff;
+ border:1px solid #555;padding:5px 9px;
+ border-radius:20px;font-size:9px;font-weight:bold;
+}
+.clubBody{padding:20px}
+.clubBody h3{font-size:19px;margin-bottom:7px}
+.clubBody p{font-size:12px;color:#888;min-height:55px}
+.clubFoot{
+ border-top:1px solid #292929;
+ margin-top:15px;padding-top:14px;
+ display:flex;justify-content:space-between;align-items:center;
+}
+.members{font-size:11px;color:#777}
+.more{border:0;background:none;color:var(--gold);font-weight:bold;font-size:11px}
+
+/* EVENTS */
+.events{background:#080808;border-top:1px solid #161616;border-bottom:1px solid #161616}
+.eventGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.event{
+ background:#111;border:1px solid #292929;
+ border-radius:16px;padding:23px;
+}
+.date{
+ width:55px;height:58px;
+ border:1px solid #444;border-radius:10px;
+ display:grid;place-items:center;
+ margin-bottom:17px;
+}
+.date strong{font-size:21px}
+.date small{color:var(--gold)}
+.event h3{margin-bottom:6px}
+.event p{font-size:12px;color:#888;margin-bottom:15px}
+.info{font-size:11px;color:#777;display:grid;gap:4px;margin-bottom:18px}
+
+/* REGISTER */
+.register{
+ background:#f4f4f4;color:#080808;
+}
+.regGrid{
+ display:grid;grid-template-columns:.8fr 1.2fr;
+ gap:50px;align-items:center;
+}
+.register .tag{color:#000;border-color:#ccc}
+.regText h2{font-size:47px;line-height:1.05;margin-bottom:17px}
+.regText p{color:#666;margin-bottom:22px}
+.points{display:grid;gap:11px}
+.points div{font-size:13px}
+.form{
+ background:#fff;border:1px solid #ddd;
+ padding:28px;border-radius:18px;
+ box-shadow:0 20px 50px #0001;
+}
+.form h3{font-size:24px;margin-bottom:20px}
+.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.group{display:grid;gap:6px}
+.group.full{grid-column:1/-1}
+.group label{font-size:11px;font-weight:bold}
+.group input,.group select,.group textarea{
+ padding:12px;border:1px solid #ddd;
+ border-radius:8px;outline:0;
+ background:#fafafa;color:#111;
+}
+.group textarea{min-height:90px;resize:vertical}
+.form .primary{background:#000;color:#fff;width:100%;margin-top:15px}
+.form .primary:hover{background:#222}
+
+/* CONTACT */
+.contactGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.contact{
+ background:#111;border:1px solid #292929;
+ border-radius:15px;padding:28px;text-align:center;
+}
+.contact .icon{font-size:25px;margin-bottom:10px}
+.contact p{color:#777;font-size:12px}
+
+/* FOOTER */
+footer{
+ background:#020202;border-top:1px solid #222;
+ padding:50px 0 20px;
+}
+.footerGrid{
+ display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+ gap:30px;padding-bottom:30px;
+ border-bottom:1px solid #222;
+}
+footer h4{margin-bottom:12px}
+footer li{
+ list-style:none;color:#777;font-size:12px;margin:7px 0;
+}
+.desc{color:#666;font-size:12px;max-width:300px;margin-top:13px}
+.bottom{
+ padding-top:18px;color:#555;font-size:11px;
+ display:flex;justify-content:space-between;
+}
+
+/* MODAL */
+.overlay{
+ position:fixed;inset:0;background:#000b;
+ display:none;align-items:center;justify-content:center;
+ padding:20px;z-index:3000;
+}
+.overlay.show{display:flex}
+.modal{
+ width:min(580px,100%);background:#111;
+ border:1px solid #444;border-radius:18px;
+ overflow:hidden;
+}
+.modalHead{
+ padding:18px 20px;border-bottom:1px solid #292929;
+ display:flex;justify-content:space-between;
+}
+.close{
+ background:#222;color:#fff;border:0;
+ width:35px;height:35px;border-radius:50%;font-size:20px;
+}
+.modalBody{padding:25px}
+.modalBody p{color:#888;font-size:13px}
+.detail{
+ background:#191919;padding:11px;
+ border-radius:8px;margin-top:9px;
+ display:flex;justify-content:space-between;
+ font-size:12px;
+}
+.detail span{color:#777}
+
+/* TOAST */
+.toastBox{
+ position:fixed;right:20px;bottom:20px;z-index:5000;
+ display:grid;gap:8px;
+}
+.toast{
+ background:#fff;color:#000;
+ padding:13px 17px;border-radius:9px;
+ font-size:12px;box-shadow:0 10px 30px #0005;
+ border-left:4px solid var(--gold);
+}
+
+/* RESPONSIVE */
+@media(max-width:950px){
+ .heroGrid,.regGrid{grid-template-columns:1fr}
+ .clubGrid,.eventGrid{grid-template-columns:repeat(2,1fr)}
+ .statGrid{grid-template-columns:repeat(2,1fr)}
+ .footerGrid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+ .links{
+  display:none;position:absolute;top:72px;left:0;right:0;
+  background:#080808;padding:20px;
+  flex-direction:column;
+ }
+ .links.show{display:flex}
+ .menu{display:block}
+ .hero{padding-top:55px}
+ .hero h1{font-size:48px}
+ .heroImage{height:330px}
+ .clubGrid,.eventGrid,.contactGrid,.statGrid{grid-template-columns:1fr}
+ .formGrid{grid-template-columns:1fr}
+ .group.full{grid-column:auto}
+ .footerGrid{grid-template-columns:1fr}
+ .bottom{flex-direction:column;gap:7px}
+ .head h2{font-size:34px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="nav">
+<div class="container navin">
+
+<a class="logo" href="#home">
+<span>UC</span> UniClub
+</a>
+
+<nav class="links" id="links">
+<a href="#home">HOME</a>
+<a href="#clubs">CLUBS</a>
+<a href="#events">EVENTS</a>
+<a href="#register">REGISTER</a>
+<a href="#contact">CONTACT</a>
+</nav>
+
+<button class="menu" id="menu">☰</button>
+
+</div>
+</header>
+
+
+<!-- HERO -->
+<section class="hero" id="home">
+<div class="container heroGrid">
+
+<div>
+<div class="tag">COLLEGE CLUB MANAGEMENT PORTAL</div>
+
+<h1>
+Connect.<br>
+Create.<br>
+<span>Belong.</span>
+</h1>
+
+<p>
+A smart digital platform for discovering college clubs,
+joining student communities, managing activities and
+participating in exciting campus events.
+</p>
+
+<div class="buttons">
+<a href="#clubs" class="btn primary">Explore Clubs →</a>
+<a href="#register" class="btn outline">Join Now</a>
+</div>
+</div>
+
+<div class="heroImage">
+<div class="heroBox">
+<strong>Campus Community</strong>
+<p>Where students discover their passion and build their future.</p>
+</div>
+</div>
+
+</div>
+</section>
+
+
+<!-- STATS -->
+<section class="stats">
+<div class="container">
+<div class="statGrid">
+
+<div class="stat">
+<small>ACTIVE CLUBS</small>
+<h2>12 <span>+</span></h2>
+</div>
+
+<div class="stat">
+<small>STUDENT MEMBERS</small>
+<h2>1,240 <span>+</span></h2>
+</div>
+
+<div class="stat">
+<small>UPCOMING EVENTS</small>
+<h2>18 <span>+</span></h2>
+</div>
+
+<div class="stat">
+<small>ACHIEVEMENTS</small>
+<h2>42 <span>+</span></h2>
+</div>
+
+</div>
+</div>
+</section>
+
+
+<!-- CLUBS -->
+<section id="clubs">
+<div class="container">
+
+<div class="head">
+<small>DISCOVER</small>
+<h2>Find Your Community</h2>
+<p>Explore clubs that match your interests, skills and ambitions.</p>
+</div>
+
+<div class="tools">
+
+<div class="search">
+<input id="search" placeholder="Search clubs...">
+</div>
+
+<div class="filters">
+<button class="filter active" data-filter="all">ALL</button>
+<button class="filter" data-filter="Technology">TECH</button>
+<button class="filter" data-filter="Culture">CULTURE</button>
+<button class="filter" data-filter="Sports">SPORTS</button>
+<button class="filter" data-filter="Social">SOCIAL</button>
+</div>
+
+</div>
+
+
+<div class="clubGrid" id="clubGrid">
+
+
+<!-- CODING -->
+<div class="club" data-cat="Technology" data-name="coding innovation">
+
+<div class="photo">
+<img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80">
+<span class="badge">TECHNOLOGY</span>
+</div>
+
+<div class="clubBody">
+<h3>Coding & Innovation</h3>
+<p>Programming, web development, software projects, hackathons and innovation.</p>
+
+<div class="clubFoot">
+<span class="members">245 MEMBERS</span>
+<button class="more" onclick="openClub('coding')">VIEW DETAILS →</button>
+</div>
+</div>
+</div>
+
+
+<!-- CULTURE -->
+<div class="club" data-cat="Culture" data-name="fine arts culture">
+
+<div class="photo">
+<img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80">
+<span class="badge">CULTURE</span>
+</div>
+
+<div class="clubBody">
+<h3>Fine Arts & Culture</h3>
+<p>Music, dance, painting, theatre and creative cultural activities.</p>
+
+<div class="clubFoot">
+<span class="members">180 MEMBERS</span>
+<button class="more" onclick="openClub('culture')">VIEW DETAILS →</button>
+</div>
+</div>
+</div>
+
+
+<!-- SPORTS -->
+<div class="club" data-cat="Sports" data-name="sports fitness">
+
+<div class="photo">
+<img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=800&q=80">
+<span class="badge">SPORTS</span>
+</div>
+
+<div class="clubBody">
+<h3>Sports & Fitness</h3>
+<p>Sports tournaments, fitness activities, competitions and wellness.</p>
+
+<div class="clubFoot">
+<span class="members">210 MEMBERS</span>
+<button class="more" onclick="openClub('sports')">VIEW DETAILS →</button>
+</div>
+</div>
+</div>
+
+
+<!-- LITERATURE -->
+<div class="club" data-cat="Culture" data-name="literary debate">
+
+<div class="photo">
+<img src="https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&w=800&q=80">
+<span class="badge">CULTURE</span>
+</div>
+
+<div class="clubBody">
+<h3>Literary & Debate</h3>
+<p>Reading, writing, public speaking, debates and critical thinking.</p>
+
+<div class="clubFoot">
+<span class="members">145 MEMBERS</span>
+<button class="more" onclick="openClub('literature')">VIEW DETAILS →</button>
+</div>
+</div>
+</div>
+
+
+<!-- AI -->
+<div class="club" data-cat="Technology" data-name="ai robotics">
+
+<div class="photo">
+<img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80">
+<span class="badge">TECHNOLOGY</span>
+</div>
+
+<div class="clubBody">
+<h3>AI & Robotics</h3>
+<p>Artificial intelligence, robotics, automation and emerging technology.</p>
+
+<div class="clubFoot">
+<span class="members">165 MEMBERS</span>
+<button class="more" onclick="openClub('ai')">VIEW DETAILS →</button>
+</div>
+</div>
+</div>
+
+
+<!-- SOCIAL SERVICE -->
+<div class="club" data-cat="Social" data-name="social service">
+
+<div class="photo">
+<img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=800&q=80">
+<span class="badge">SOCIAL</span>
+</div>
+
+<div class="clubBody">
+<h3>Social Service</h3>
+<p>Volunteering, community service, awareness campaigns and social impact.</p>
+
+<div class="clubFoot">
+<span class="members">195 MEMBERS</span>
+<button class="more" onclick="openClub('social')">VIEW DETAILS →</button>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</section>
+
+
+<!-- EVENTS -->
+<section class="events" id="events">
+<div class="container">
+
+<div class="head">
+<small>WHAT'S HAPPENING</small>
+<h2>Upcoming Events</h2>
+<p>Participate in workshops, competitions and campus activities.</p>
+</div>
+
+<div class="eventGrid">
+
+<div class="event">
+<div class="date"><strong>28</strong><small>SEP</small></div>
+<h3>Hackathon 2026</h3>
+<p>Build innovative solutions for real-world problems.</p>
+<div class="info">
+<span>📍 Innovation Lab</span>
+<span>⏰ 9:00 AM</span>
+<span>👥 120 Seats</span>
+</div>
+<button class="btn primary" onclick="eventReg('Hackathon 2026')">Register →</button>
+</div>
+
+<div class="event">
+<div class="date"><strong>05</strong><small>OCT</small></div>
+<h3>Cultural Fest</h3>
+<p>A celebration of music, dance, art and traditions.</p>
+<div class="info">
+<span>📍 Main Auditorium</span>
+<span>⏰ 10:00 AM</span>
+<span>👥 500 Seats</span>
+</div>
+<button class="btn primary" onclick="eventReg('Cultural Fest')">Register →</button>
+</div>
+
+<div class="event">
+<div class="date"><strong>12</strong><small>OCT</small></div>
+<h3>AI & Future Tech</h3>
+<p>Explore artificial intelligence and future technologies.</p>
+<div class="info">
+<span>📍 Seminar Hall</span>
+<span>⏰ 2:00 PM</span>
+<span>👥 200 Seats</span>
+</div>
+<button class="btn primary" onclick="eventReg('AI & Future Tech')">Register →</button>
+</div>
+
+</div>
+</div>
+</section>
+
+
+<!-- REGISTER -->
+<section class="register" id="register">
+<div class="container regGrid">
+
+<div class="regText">
+
+<div class="tag">BECOME A MEMBER</div>
+
+<h2>Find your people.<br>Build your future.</h2>
+
+<p>
+Join a club, develop new skills, meet new people and
+make your college experience more meaningful.
+</p>
+
+<div class="points">
+<div>✓ Discover communities based on your interests</div>
+<div>✓ Participate in exclusive campus events</div>
+<div>✓ Improve leadership and teamwork skills</div>
+<div>✓ Build projects and unforgettable experiences</div>
+</div>
+
+</div>
+
+
+<div class="form">
+
+<h3>Membership Application</h3>
+
+<form id="form">
+
+<div class="formGrid">
+
+<div class="group">
+<label>FULL NAME *</label>
+<input id="name" required placeholder="Your name">
+</div>
+
+<div class="group">
+<label>STUDENT ID *</label>
+<input id="sid" required placeholder="STU2026001">
+</div>
+
+<div class="group">
+<label>EMAIL *</label>
+<input id="email" type="email" required placeholder="you@example.com">
+</div>
+
+<div class="group">
+<label>DEPARTMENT *</label>
+<select id="dept" required>
+<option value="">Select</option>
+<option>Computer Science</option>
+<option>Information Technology</option>
+<option>Electronics</option>
+<option>Mechanical</option>
+<option>Civil</option>
+<option>Management</option>
+<option>Arts & Science</option>
+</select>
+</div>
+
+<div class="group">
+<label>YEAR *</label>
+<select id="year" required>
+<option value="">Select</option>
+<option>1st Year</option>
+<option>2nd Year</option>
+<option>3rd Year</option>
+<option>4th Year</option>
+</select>
+</div>
+
+<div class="group">
+<label>SELECT CLUB *</label>
+<select id="club" required>
+<option value="">Select</option>
+<option>Coding & Innovation</option>
+<option>Fine Arts & Culture</option>
+<option>Sports & Fitness</option>
+<option>Literary & Debate</option>
+<option>AI & Robotics</option>
+<option>Social Service</option>
+</select>
+</div>
+
+<div class="group full">
+<label>WHY DO YOU WANT TO JOIN?</label>
+<textarea id="reason" placeholder="Tell us about your interest..."></textarea>
+</div>
+
+</div>
+
+<button class="btn primary" type="submit">
+SUBMIT APPLICATION →
+</button>
+
+</form>
+</div>
+
+</div>
+</section>
+
+
+<!-- CONTACT -->
+<section id="contact">
+<div class="container">
+
+<div class="head">
+<small>SUPPORT</small>
+<h2>Get In Touch</h2>
+<p>Need help with clubs, membership or events?</p>
+</div>
+
+<div class="contactGrid">
+
+<div class="contact">
+<div class="icon">✉</div>
+<h3>Email</h3>
+<p>clubs@university.edu</p>
+</div>
+
+<div class="contact">
+<div class="icon">☎</div>
+<h3>Phone</h3>
+<p>+91 98765 43210</p>
+</div>
+
+<div class="contact">
+<div class="icon">⌖</div>
+<h3>Activity Office</h3>
+<p>Administration Block, Campus</p>
+</div>
+
+</div>
+</div>
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+<div class="container">
+
+<div class="footerGrid">
+
+<div>
+<div class="logo"><span>UC</span> UniClub</div>
+<p class="desc">
+A modern digital platform connecting students
+with clubs, communities and campus opportunities.
+</p>
+</div>
+
+<div>
+<h4>Platform</h4>
+<ul>
+<li>Home</li>
+<li>Clubs</li>
+<li>Events</li>
+<li>Membership</li>
+</ul>
+</div>
+
+<div>
+<h4>Clubs</h4>
+<ul>
+<li>Technology</li>
+<li>Culture</li>
+<li>Sports</li>
+<li>Social Service</li>
+</ul>
+</div>
+
+<div>
+<h4>Support</h4>
+<ul>
+<li>Help Center</li>
+<li>Guidelines</li>
+<li>Privacy</li>
+<li>Terms</li>
+</ul>
+</div>
+
+</div>
+
+<div class="bottom">
+<span>© 2026 UniClub</span>
+<span>College Hackathon Project</span>
+</div>
+
+</div>
+</footer>
+
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+<div class="modal">
+
+<div class="modalHead">
+<h3 id="modalTitle">Club Details</h3>
+<button class="close" onclick="closeModal()">×</button>
+</div>
+
+<div class="modalBody" id="modalBody"></div>
+
+</div>
+</div>
+
+
+<div class="toastBox" id="toastBox"></div>
+
+
+<script>
+
+/* MOBILE MENU */
+document.getElementById("menu").onclick=()=>{
+ document.getElementById("links").classList.toggle("show");
+};
+
+
+/* SEARCH + FILTER */
+const search=document.getElementById("search");
+const cards=document.querySelectorAll(".club");
+let current="all";
+
+function filterClubs(){
+ let text=search.value.toLowerCase();
+
+ cards.forEach(c=>{
+  let okCat=current==="all"||c.dataset.cat===current;
+  let okText=c.dataset.name.includes(text);
+  c.style.display=okCat&&okText?"block":"none";
+ });
+}
+
+search.oninput=filterClubs;
+
+document.querySelectorAll(".filter").forEach(btn=>{
+ btn.onclick=()=>{
+  document.querySelectorAll(".filter")
+  .forEach(x=>x.classList.remove("active"));
+
+  btn.classList.add("active");
+  current=btn.dataset.filter;
+  filterClubs();
+ };
+});
+
+
+/* CLUB DETAILS */
+const data={
+ coding:{
+  title:"Coding & Innovation Club",
+  desc:"A technology community where students learn programming and build innovative digital solutions.",
+  members:"245",
+  category:"Technology",
+  activities:"Coding, Web Development, Hackathons, App Development"
+ },
+ culture:{
+  title:"Fine Arts & Culture Club",
+  desc:"A creative space for students interested in music, dance, painting, theatre and cultural activities.",
+  members:"180",
+  category:"Culture",
+  activities:"Dance, Music, Theatre, Painting, Cultural Events"
+ },
+ sports:{
+  title:"Sports & Fitness Club",
+  desc:"A community promoting physical fitness, sportsmanship and healthy competition.",
+  members:"210",
+  category:"Sports",
+  activities:"Football, Cricket, Badminton, Athletics, Fitness"
+ },
+ literature:{
+  title:"Literary & Debate Club",
+  desc:"A platform for reading, writing, public speaking and intellectual discussion.",
+  members:"145",
+  category:"Culture",
+  activities:"Debates, Poetry, Writing, Quizzes, Public Speaking"
+ },
+ ai:{
+  title:"AI & Robotics Club",
+  desc:"Students explore artificial intelligence, robotics, automation and emerging technologies.",
+  members:"165",
+  category:"Technology",
+  activities:"AI, Robotics, Automation, Technical Projects"
+ },
+ social:{
+  title:"Social Service Club",
+  desc:"A student-led community working towards positive social and environmental impact.",
+  members:"195",
+  category:"Social",
+  activities:"Volunteering, Awareness Drives, Blood Camps, Community Service"
+ }
+};
+
+function openClub(id){
+
+ let d=data[id];
+
+ document.getElementById("modalTitle").textContent=d.title;
+
+ document.getElementById("modalBody").innerHTML=`
+ <p>${d.desc}</p>
+
+ <div class="detail">
+ <span>Category</span><b>${d.category}</b>
+ </div>
+
+ <div class="detail">
+ <span>Members</span><b>${d.members}</b>
+ </div>
+
+ <div class="detail">
+ <span>Activities</span><b>${d.activities}</b>
+ </div>
+
+ <br>
+
+ <button class="btn primary" style="width:100%"
+ onclick="joinClub('${d.title}')">
+ JOIN THIS CLUB →
+ </button>
+ `;
+
+ document.getElementById("overlay").classList.add("show");
+}
+
+function closeModal(){
+ document.getElementById("overlay").classList.remove("show");
+}
+
+function joinClub(name){
+ closeModal();
+ document.getElementById("club").value=name;
+ document.getElementById("register").scrollIntoView({behavior:"smooth"});
+ toast("Club selected. Complete your application.");
+}
+
+
+/* EVENT REGISTRATION */
+function eventReg(name){
+ let events=JSON.parse(localStorage.getItem("events")||"[]");
+ events.push({name,date:new Date().toLocaleString()});
+ localStorage.setItem("events",JSON.stringify(events));
+ toast("✓ Registered for "+name);
+}
+
+
+/* FORM */
+document.getElementById("form").onsubmit=function(e){
+
+ e.preventDefault();
+
+ let name=document.getElementById("name").value.trim();
+ let email=document.getElementById("email").value.trim();
+ let club=document.getElementById("club").value;
+
+ if(name.length<3){
+  toast("Please enter a valid name");
+  return;
+ }
+
+ let applications=
+ JSON.parse(localStorage.getItem("applications")||"[]");
+
+ applications.push({
+  name:name,
+  email:email,
+  club:club,
+  date:new Date().toLocaleString()
+ });
+
+ localStorage.setItem(
+  "applications",
+  JSON.stringify(applications)
+ );
+
+ toast("✓ Application submitted successfully!");
+
+ this.reset();
+};
+
+
+/* TOAST */
+function toast(message){
+
+ let box=document.getElementById("toastBox");
+
+ let t=document.createElement("div");
+ t.className="toast";
+ t.textContent=message;
+
+ box.appendChild(t);
+
+ setTimeout(()=>t.remove(),3000);
+}
+
+
+/* CLOSE MODAL */
+document.getElementById("overlay").onclick=e=>{
+ if(e.target.id==="overlay")closeModal();
+};
+
+document.onkeydown=e=>{
+ if(e.key==="Escape")closeModal();
+};
+
+</script>
+
+</body>
+</html>
